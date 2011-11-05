@@ -4,7 +4,7 @@ Obligatory
 * Make loop
 	Catch signals
 [2011-11-05] Exec one command with arguments from command line
-Commands search order (built-in, current dir and /bin)
+* Commands search order (built-in, current dir and /bin)
 Split commands with pipes
 Exec several commands with arguments from command line
 Connect stdin and stdout between commands
@@ -13,8 +13,8 @@ Stdout redirection
 Ampersand
 	Don't redirect stdin to command (/dev/null instead of /dev/cons)
 	Return prompt inmediately
-Built-ins
-	cd
+* Built-ins
+	* cd
 
 Optional I
 ==========

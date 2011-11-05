@@ -13,27 +13,23 @@
 
 #include <bio.h>
 
+#include "builtins.h"
+
 
 void
-init(Biobuf** bin, Biobuf** bout)
+init(Biobuf** bin)
 {
 	// Allocate buffer for standard input
 	*bin = Bfdopen(0, O_RDONLY);
 	if(*bin == nil)
 		sysfatal("%s: standard input: %r", argv0);
-
-	// Allocate buffer for standard output
-	*bout = Bfdopen(1, O_WRONLY);
-	if(*bout == nil)
-		sysfatal("%s: standard output: %r", argv0);
 }
 
 void
-deinit(Biobuf** bin, Biobuf** bout)
+deinit(Biobuf** bin)
 {
 	// Free buffers
 	Bterm(*bin);
-	Bterm(*bout);
 }
 
 
@@ -69,40 +65,70 @@ run(char* cmd, char* argv[])
 	}
 }
 
+typedef void (*builtin)(char* argv[]);
+
+builtin
+isBuiltin(char* command)
+{
+	if(!strcmp(command, "cd"))
+		return cd;
+	return nil;
+}
+
+
+void
+process(char* line)
+{
+	// Create array of arguments from line
+	char** array = calloc(10, sizeof(char*));
+//	char* array[10];
+	tokenize(line, array, 10);
+
+	// run command line
+	if(array[0] != nil)
+	{
+		// Check if command is a built-in function
+		builtin command = isBuiltin(array[0]);
+		if(command)
+			command(array);
+
+		// Not built-in, search command
+		else
+		{
+			// Calc command path
+			char path[256];
+			strncpy(path, "/bin/",6);
+			strncat(path, array[0], strlen(array[0]));
+
+			// run command
+			run(path, array);
+		}
+	}
+
+	// Free array
+	free(array);
+}
+
 
 void
 main(int argc, char* argv[])
 {
 	Biobuf*	bin;
-	Biobuf*	bout;
 
 	// Init buffers
-	init(&bin, &bout);
+	init(&bin);
 
 	// Main loop
 	for(;;)
 	{
 		char* line = Brdstr(bin, '\n', 0);
 		if(line)
-		{
-			Bwrite(bout, line, Blinelen(bin));
-			Bflush(bout);
-
-			// Create array of arguments from line
-			char** array = malloc(10 * sizeof(char*));
-			tokenize(line, array, 10);
-
-			// run command
-			run("/bin/ls", array);
-
-			// Free line and array
-			free(line);
-			free(array);
-		}
+			process(line);
+		free(line);
 	}
 
 	// Free buffers
-	deinit(&bin, &bout);
+	deinit(&bin);
 
 	// Exit sucesfully
 	exits(nil);
