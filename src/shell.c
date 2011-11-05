@@ -16,23 +16,6 @@
 #include "builtins.h"
 
 
-void
-init(Biobuf** bin)
-{
-	// Allocate buffer for standard input
-	*bin = Bfdopen(0, O_RDONLY);
-	if(*bin == nil)
-		sysfatal("%s: standard input: %r", argv0);
-}
-
-void
-deinit(Biobuf** bin)
-{
-	// Free buffers
-	Bterm(*bin);
-}
-
-
 int
 run(char* cmd, char* argv[])
 {
@@ -77,7 +60,7 @@ isBuiltin(char* command)
 
 
 void
-process(char* line)
+process_command(char* line)
 {
 	// Create array of arguments from line
 	char** array = calloc(10, sizeof(char*));
@@ -109,26 +92,44 @@ process(char* line)
 	free(array);
 }
 
+void
+process_pipeline(char* line)
+{
+	// Split pipeline in independent commands
+	char** array = calloc(10, sizeof(char*));
+//	char* array[10];
+	int numCommands = gettokens(line, array, 10, "|");
+
+	// run command line
+	if(array[0] != nil)
+	{
+		process_command(array[0]);
+	}
+
+	// Free array
+	free(array);
+}
+
 
 void
 main(int argc, char* argv[])
 {
-	Biobuf*	bin;
-
-	// Init buffers
-	init(&bin);
+	// Allocate buffer for standard input
+	Biobuf*	bin = Bfdopen(0, O_RDONLY);
+	if(bin == nil)
+		sysfatal("%s: standard input: %r", argv0);
 
 	// Main loop
 	for(;;)
 	{
 		char* line = Brdstr(bin, '\n', 0);
 		if(line)
-			process(line);
+			process_pipeline(line);
 		free(line);
 	}
 
-	// Free buffers
-	deinit(&bin);
+	// Free stdin buffer
+	Bterm(bin);
 
 	// Exit sucesfully
 	exits(nil);
