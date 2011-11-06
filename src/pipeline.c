@@ -15,53 +15,65 @@ int
 process_pipeline(char* line)
 {
 	// Split pipeline in independent commands
-	char** array = calloc(10, sizeof(char*));
-//	char* array[10];
+	char* array[10];
 	int numCommands = gettokens(line, array, 10, "|");
 
 	// run pipeline
-	int piped = 0;
+//	int piped = 0;
 
 	int i;
 	for(i = 0; i < numCommands; ++i)
 	{
 		int	fd[2];
-
 		pipe(fd);
+
 		switch(fork())
 		{
 			case -1:
 				return -1;
 
 			case 0:		// child
-				// Redirect stdin
-				dup(fd[0],0);
-				close(fd[0]);
-
-//				// Redirect stdout
-				dup(fd[1],1);
-				close(fd[1]);
+//				// Redirect stdin
+//				dup(fd[0],0);
+//				close(fd[0]);
+//
+////				// Redirect stdout
+//				dup(fd[1],1);
+//				close(fd[1]);
 
 				process_command(array[i]);
 
-			default:	// parent
-				// Redirect previous stdout as child stdin
-				dup(piped,fd[1]);
-				if(piped)
-					close(piped);
-
-//				// Redirect child stdout to stdin
-//				dup(fd[0],1);
-//				dup(fd[0],pipedStdout);
-				piped = fd[0];
-//				close(fd[0]);
+//			default:	// parent
+//				// Redirect previous stdout as child stdin
+//				dup(piped,fd[1]);
+//				if(piped)
+//					close(piped);
+//
+////				// Redirect child stdout to stdin
+////				dup(fd[0],1);
+////				dup(fd[0],pipedStdout);
+//				piped = fd[0];
+////				close(fd[0]);
 		}
 	}
 
 //	dup(pipedStdout,1);
 
-	// Free array
-	free(array);
+	// Wait for child process result
+	for(i = 0; i < numCommands; ++i)
+	{
+		Waitmsg* m = wait();
+
+		if(m->msg[0] == 0)
+			free(m);
+
+		else
+		{
+			werrstr(m->msg);
+			free(m);
+			return -1;
+		}
+	}
 
 	return 0;
 }
