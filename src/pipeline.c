@@ -12,17 +12,10 @@
 
 
 int
-process_pipeline(char* line)
+run_pipeline(char* array[], int numCommands)
 {
-	// Split pipeline in independent commands
-	char* array[10];
-	int numCommands = gettokens(line, array, 10, "|");
-
-	// run pipeline
-//	int piped = 0;
-
-	int i;
-	for(i = 0; i < numCommands; ++i)
+	int i = 0;
+	for(; i < numCommands; ++i)
 	{
 		int	fd[2];
 		pipe(fd);
@@ -33,34 +26,29 @@ process_pipeline(char* line)
 				return -1;
 
 			case 0:		// child
-//				// Redirect stdin
-//				dup(fd[0],0);
-//				close(fd[0]);
-//
-////				// Redirect stdout
-//				dup(fd[1],1);
-//				close(fd[1]);
+				close(fd[0]);
+				if(i < numCommands-1)
+					dup(fd[1],1);
+				close(fd[1]);
 
 				process_command(array[i]);
 
-//			default:	// parent
-//				// Redirect previous stdout as child stdin
-//				dup(piped,fd[1]);
-//				if(piped)
-//					close(piped);
-//
-////				// Redirect child stdout to stdin
-////				dup(fd[0],1);
-////				dup(fd[0],pipedStdout);
-//				piped = fd[0];
-////				close(fd[0]);
+			default:	// parent
+				close(fd[1]);
+				if(i < numCommands-1)
+					dup(fd[0],0);
+				close(fd[0]);
 		}
 	}
 
-//	dup(pipedStdout,1);
+	return 0;
+}
 
-	// Wait for child process result
-	for(i = 0; i < numCommands; ++i)
+int
+wait_childrens(char* array[], int numCommands)
+{
+	int i = 0;
+	for(; i < numCommands; ++i)
 	{
 		Waitmsg* m = wait();
 
@@ -76,4 +64,20 @@ process_pipeline(char* line)
 	}
 
 	return 0;
+}
+
+
+int
+process_pipeline(char* line)
+{
+	// Split pipeline in independent commands
+	char* array[10];
+	int numCommands = gettokens(line, array, 10, "|");
+
+	// run pipeline
+	int ret = run_pipeline(array, numCommands);
+	if(ret < 0) return ret;
+
+	// Wait for child process result
+	return wait_childrens(array, numCommands);
 }

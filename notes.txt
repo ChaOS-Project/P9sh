@@ -7,7 +7,7 @@ Obligatory
 * Commands search order (built-in, current dir and /bin)
 [2011-11-05] Split commands with pipes
 [2011-11-05] Exec several commands with arguments from command line
-* Connect stdin and stdout between commands
+[2011-11-06] Connect stdin and stdout between commands (pipes)
 [2011-11-05] Stdin redirection
 [2011-11-05] Stdout redirection
 Ampersand
