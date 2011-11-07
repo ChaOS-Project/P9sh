@@ -25,14 +25,10 @@ main(int argc, char* argv[])
 		sysfatal("%s: standard input: %r", argv0);
 
 	// Main loop
-	for(;;)
+	while(line = Brdstr(bin, '\n', 0))
 	{
-		char* line = Brdstr(bin, '\n', 0);
-		if(line)
-		{
-			process_script(line);
-			free(line);
-		}
+		process_script(line);
+		free(line);
 	}
 
 	// Free stdin buffer
