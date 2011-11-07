@@ -25,6 +25,7 @@ main(int argc, char* argv[])
 		sysfatal("%s: standard input: %r", argv0);
 
 	// Main loop
+	char* line;
 	while(line = Brdstr(bin, '\n', 0))
 	{
 		process_script(line);

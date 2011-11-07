@@ -10,7 +10,7 @@ Obligatory
 [2011-11-06] Connect stdin and stdout between commands (pipes)
 [2011-11-05] Stdin redirection
 [2011-11-05] Stdout redirection
-Ampersand
+[2011-11-05] Ampersand
 	Don't redirect stdin to command (/dev/null instead of /dev/cons)
 	Return prompt inmediately
 * Built-ins
