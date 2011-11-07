@@ -23,80 +23,6 @@ isBuiltin(char* command)
 	return nil;
 }
 
-void
-redirections(char* array[], int* len)
-{
-	int i = 0;
-	for(; i < *len; ++i)
-	{
-		char c = array[i][0];
-
-		switch(c)
-		{
-			case '<':	// Stdin
-			{
-				// '<' is alone, get it's next argument
-				if(strlen(array[i]) == 1)
-				{
-					int j = i;
-					for(; j < *len; ++j)
-						array[j] = array[j+1];
-
-					(*len)--;
-				}
-
-				// '<' has the file, get's it's pointer
-				else
-					array[i]++;
-
-				// Open file descriptor for redirection
-				int fd = open(array[i], OREAD);
-				dup(fd, 0);
-				close(fd);
-
-				// Remove redirection from command parameters
-				int j = i;
-				for(; j < *len; ++j)
-					array[j] = array[j+1];
-
-				(*len)--;
-			}
-			break;
-
-			case '>':	// Stdout
-			{
-				// '>' is alone, get it's next argument
-				if(strlen(array[i]) == 1)
-				{
-					int j = i;
-					for(; j < *len; ++j)
-						array[j] = array[j+1];
-
-					(*len)--;
-				}
-
-				// '<' has the file, get's it's pointer
-				else
-					array[i]++;
-
-				// Open file descriptor for redirection
-				int fd = open(array[i], OWRITE);
-				if(fd < 0)
-					fd = create(array[i], OWRITE, 0664);
-				dup(fd, 1);
-				close(fd);
-
-				// Remove redirection from command parameters
-				int j = i;
-				for(; j < *len; ++j)
-					array[j] = array[j+1];
-
-				(*len)--;
-			}
-		}
-	}
-}
-
 
 void
 run_command(char* array[])
@@ -134,9 +60,6 @@ process_command(char* line)
 	char** array = calloc(10, sizeof(char*));
 //	char* array[10];
 	int numTokens = tokenize(line, array, 10);
-
-	// apply redirections
-	redirections(array, &numTokens);
 
 	// run command line
 	run_command(array);

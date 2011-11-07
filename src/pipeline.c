@@ -9,6 +9,7 @@
 #include <libc.h>
 
 #include "command.h"
+#include "file_redirections.h"
 
 
 int
@@ -70,6 +71,9 @@ wait_childrens(char* array[], int numCommands)
 int
 process_pipeline(char* line)
 {
+	// apply file redirections
+	file_redirections(line);
+
 	// Split pipeline in independent commands
 	char* array[10];
 	int numCommands = gettokens(line, array, 10, "|");
