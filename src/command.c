@@ -15,7 +15,9 @@ typedef void (*builtin)(char* argv[]);
 
 
 builtin
-isBuiltin(char* command)
+getBuiltin(char* command)
+// Return a pointer to the function corresponding to the built-in `command`.
+// If `command` doesn't exists return nil.
 {
 	if(!strcmp(command, "cd"))
 		return cd;
@@ -30,7 +32,7 @@ run_command(char* array[])
 	if(array[0] != nil)
 	{
 		// Check if command is a built-in function
-		builtin command = isBuiltin(array[0]);
+		builtin command = getBuiltin(array[0]);
 		if(command)
 		{
 			command(array);
@@ -59,7 +61,7 @@ process_command(char* line)
 	// Create array of arguments from line
 	char** array = calloc(10, sizeof(char*));
 //	char* array[10];
-	int numTokens = tokenize(line, array, 10);
+	tokenize(line, array, 10);
 
 	// run command line
 	run_command(array);

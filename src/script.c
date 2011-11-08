@@ -37,7 +37,12 @@ background(char* line)
 
 				// process pipeline
 				process_pipeline(array[i]);
-				exits(nil);
+
+				// check and set error string (if any)
+				char err[ERRMAX];
+				uint nerr;
+				rerrstr(err, nerr);
+				exits(err);
 			}
 
 			// parent loop to exec in background the next command (if any)
@@ -68,19 +73,26 @@ process_script(char* line)
 		background(array[i]);
 
 		// run foreground command
-		Waitmsg*	m;
-
 		switch(fork())
 		{
 			case -1:
 				return -1;
 
 			case 0:		// child
+			{
+				// process pipeline
 				process_pipeline(array[i]);
-				exits(nil);
+
+				// check and set error string (if any)
+				char err[ERRMAX];
+				uint nerr;
+				rerrstr(err, nerr);
+				exits(err);
+			}
 
 			default:	// parent
-				m = wait();
+			{
+				Waitmsg* m = wait();
 
 				if(m->msg[0] == 0)
 					free(m);
@@ -91,6 +103,7 @@ process_script(char* line)
 					free(m);
 					return -1;
 				}
+			}
 		}
 	}
 

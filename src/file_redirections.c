@@ -74,13 +74,18 @@ file_redirections(char* line)
 		{
 			case '<':	// Stdin
 				stdin_redirection(array, i, &numTokens);
-				--i;
 				break;
 
 			case '>':	// Stdout
 				stdout_redirection(array, i, &numTokens);
-				--i;
-		}
+
+			default:
+				continue;
+		};
+
+		// step back index because we have removed the redirection entry so next
+		// loop we will check over the same (next) one
+		--i;
 	}
 
 	// collapse line to remove redirections

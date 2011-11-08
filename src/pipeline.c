@@ -33,6 +33,7 @@ run_pipeline(char* array[], int numCommands)
 				close(fd[1]);
 
 				process_command(array[i]);
+				exits(nil);
 
 			default:	// parent
 				close(fd[1]);
