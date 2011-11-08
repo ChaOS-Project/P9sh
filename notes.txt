@@ -25,7 +25,7 @@ Send stdin content to command
 Optional II
 ===========
 Set environmental vars
-Expand vars previously to command processing
+* Expand vars previously to command processing
 
 Optional III
 ============

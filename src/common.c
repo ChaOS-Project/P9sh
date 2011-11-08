@@ -10,6 +10,17 @@
 
 
 void
+exitError()
+// Check and set an error string previouly defined with werrstr
+{
+	char err[ERRMAX];
+	uint nerr = 0;
+	rerrstr(err, nerr);
+	exits(err);
+}
+
+
+void
 redirect_stdin(char* filepath)
 {
 	int fd = open(filepath, OREAD);

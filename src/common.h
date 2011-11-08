@@ -8,6 +8,8 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+void exitError();
+
 void redirect_stdin(char* filepath);
 void redirect_stdout(char* filepath);
 

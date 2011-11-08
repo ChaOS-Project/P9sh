@@ -13,6 +13,13 @@
 
 
 int
+env_vars(char* line)
+{
+	return 0;
+}
+
+
+int
 background(char* line)
 // Check and exec on background all the commands ended with '&' on the command
 // line and return the last, foreground command
@@ -37,12 +44,7 @@ background(char* line)
 
 				// process pipeline
 				process_pipeline(array[i]);
-
-				// check and set error string (if any)
-				char err[ERRMAX];
-				uint nerr;
-				rerrstr(err, nerr);
-				exits(err);
+				exitError();
 			}
 
 			// parent loop to exec in background the next command (if any)
@@ -69,6 +71,9 @@ process_script(char* line)
 	int i;
 	for(i = 0; i < numPipelines; ++i)
 	{
+		// expand environment variables
+		int evModified = env_vars(array[i]);
+
 		// move commands to background (if necesary)
 		background(array[i]);
 
@@ -82,12 +87,7 @@ process_script(char* line)
 			{
 				// process pipeline
 				process_pipeline(array[i]);
-
-				// check and set error string (if any)
-				char err[ERRMAX];
-				uint nerr;
-				rerrstr(err, nerr);
-				exits(err);
+				exitError();
 			}
 
 			default:	// parent
@@ -105,6 +105,10 @@ process_script(char* line)
 				}
 			}
 		}
+
+		// free line created by environment variables expansion
+		if(evModified)
+			free(line);
 	}
 
 	return 0;
