@@ -8,6 +8,9 @@
  ============================================================================
  */
 
+// This program is currently being refactored to optimice and clean it's code
+
+
 #include <u.h>
 #include <libc.h>
 

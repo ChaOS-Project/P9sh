@@ -8,11 +8,14 @@
 #include <u.h>
 #include <libc.h>
 
+#include "common.h"
 #include "pipeline.h"
 
 
 int
 background(char* line)
+// Check and exec on background all the commands ended with '&' on the command
+// line and return the last, foreground command
 {
 	// Split pipeline in independent commands
 	char* array[10];
@@ -27,21 +30,21 @@ background(char* line)
 			case -1:
 				return -1;
 
-			case 0:		// child
+			case 0:	// child
 			{
 				// redirect stdin to /dev/null
-				int fd = open("/dev/null", OREAD);
-				dup(fd, 0);
-				close(fd);
+				redirect_stdin("/dev/null");
 
 				// process pipeline
 				process_pipeline(array[i]);
 				exits(nil);
 			}
+
+			// parent loop to exec in background the next command (if any)
 		}
 	}
 
-	// collapse line
+	// collapse line to let only the last (not background) command on it
 	int len = strlen(array[numCommands-1]);
 	memmove(line, array[numCommands-1], len);
 	*(line+len) = '\0';
