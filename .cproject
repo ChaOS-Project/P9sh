@@ -39,6 +39,7 @@
 </option>
 <option id="gnu.c.link.option.libs.1856083795" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="bio"/>
+<listOptionValue builtIn="false" value="regexp9"/>
 <listOptionValue builtIn="false" value="9"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1037821177" superClass="cdt.managedbuild.tool.gnu.c.linker.input">

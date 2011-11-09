@@ -8,14 +8,61 @@
 #include <u.h>
 #include <libc.h>
 
+#include <regexp.h>
+
 #include "common.h"
 #include "pipeline.h"
 
 
-int
-env_vars(char* line)
+char*
+expand_envVars(char* line)
 {
-	return 0;
+	// Compile regular expression
+	Reprog* prog = regcomp("[a-zA-Z_]+");
+//	Reprog* prog = regcomp("\\$[a-zA-Z_]+");
+	print("prog: %x\n",prog);
+
+	Resub sub[16];
+	char* expanded = nil;
+	print("line: %s\n", line);
+	print("strlen: %d\n", strlen(line));
+
+	print("nelem(sub): %d\n", nelem(sub));
+	print("regexec: %d\n", regexec(prog, line, sub, nelem(sub)));
+
+	// Exec regular expression until there's no match
+	while(regexec(prog, line, sub, nelem(sub)))
+	{
+		print("4");
+		if(expanded == nil)
+		{
+			print("5");
+			expanded = malloc(1024 * 10 * sizeof(char));
+			*expanded = '\0';
+			print("6");
+		}
+
+		// Concat normal string from begining (if any)
+		if(line < sub[0].s.sp)
+			strncat(expanded, line, sub[0].s.sp - line);
+		print("7");
+
+		// Concat environment var
+		strncat(expanded, sub[0].s.sp, sub[0].e.ep - sub[0].s.sp);
+		print("8");
+
+		// Advance line pointer to catch the next match (if any)
+		line = sub[0].e.ep;
+	}
+	print("9");
+
+	// Concat remaining normal string after last match (if any)
+	strncat(expanded, line, strlen(line));
+
+	// Free compiled regular expression
+	free(prog);
+
+	return expanded;
 }
 
 
@@ -71,8 +118,10 @@ process_script(char* line)
 	int i;
 	for(i = 0; i < numPipelines; ++i)
 	{
-		// expand environment variables
-		int evModified = env_vars(array[i]);
+		// expand environment variables and substitute command line char pointer
+		// with the one with expanded environment variables (if necesary)
+		char* expanded = expand_envVars(array[i]);
+//		if(expanded) array[i] = expanded;
 
 		// move commands to background (if necesary)
 		background(array[i]);
@@ -107,8 +156,7 @@ process_script(char* line)
 		}
 
 		// free line created by environment variables expansion
-		if(evModified)
-			free(line);
+		free(expanded);
 	}
 
 	return 0;
