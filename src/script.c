@@ -8,6 +8,7 @@
 #include <u.h>
 #include <libc.h>
 
+#include "builtins.h"
 #include "common.h"
 #include "pipeline.h"
 
@@ -54,6 +55,23 @@ background(char* line)
 
 
 int
+builtin_cd(char* line)
+{
+	char* array[10];
+	int numTokens = tokenize(line, array, 10);
+
+	if(!strcmp(array[0], "cd"))
+	{
+		cd(numTokens, array);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+
+int
 process_script(char* line)
 {
 	// Split script in independent pipelines
@@ -66,6 +84,11 @@ process_script(char* line)
 	{
 		// move commands to background (if necesary)
 		background(array[i]);
+
+		// Exec `cd` (it's a built-in, but must change shell environment itself,
+		// so we check and exec for it directly here)
+		if(builtin_cd(array[i]))
+			continue;
 
 		// run foreground command
 		Waitmsg*	m;

@@ -11,29 +11,29 @@
 #include "builtins.h"
 
 
-typedef void (*builtin)(char* argv[]);
+typedef void (*builtin)(int argc, char* argv[]);
 
 
 builtin
 isBuiltin(char* command)
 {
-	if(!strcmp(command, "cd"))
-		return cd;
+//	if(!strcmp(command, "cd"))
+//		return cd;
 
 	return nil;
 }
 
 
 void
-run_command(char* array[])
+run_command(int argc, char* argv[])
 {
-	if(array[0] != nil)
+	if(argv[0] != nil)
 	{
 		// Check if command is a built-in function
-		builtin command = isBuiltin(array[0]);
+		builtin command = isBuiltin(argv[0]);
 		if(command)
 		{
-			command(array);
+			command(argc, argv);
 			exits(nil);
 		}
 
@@ -43,10 +43,10 @@ run_command(char* array[])
 			// Calc command path
 			char path[256];
 			strncpy(path, "/bin/",6);
-			strncat(path, array[0], strlen(array[0]));
+			strncat(path, argv[0], strlen(argv[0]));
 
 			// run command
-			exec(path, array);
+			exec(path, argv);
 			sysfatal("exec: %r");
 		}
 	}
@@ -62,7 +62,7 @@ process_command(char* line)
 	int numTokens = tokenize(line, array, 10);
 
 	// run command line
-	run_command(array);
+	run_command(numTokens, array);
 
 	// Free array
 	free(array);
