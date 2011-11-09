@@ -10,6 +10,7 @@
 
 #include <regexp.h>
 
+#include "builtins.h"
 #include "common.h"
 #include "pipeline.h"
 
@@ -108,6 +109,23 @@ background(char* line)
 
 
 int
+builtin_cd(char* line)
+{
+	char* array[10];
+	int numTokens = tokenize(line, array, 10);
+
+	if(!strcmp(array[0], "cd"))
+	{
+		cd(numTokens, array);
+
+		return 1;
+	}
+
+	return 0;
+}
+
+
+int
 process_script(char* line)
 {
 	// Split script in independent pipelines
@@ -120,11 +138,16 @@ process_script(char* line)
 	{
 		// expand environment variables and substitute command line char pointer
 		// with the one with expanded environment variables (if necesary)
-		char* expanded = expand_envVars(array[i]);
+//		char* expanded = expand_envVars(array[i]);
 //		if(expanded) array[i] = expanded;
 
 		// move commands to background (if necesary)
 		background(array[i]);
+
+		// Exec `cd` (it's a built-in, but must change shell environment itself,
+		// so we check and exec for it directly here)
+		if(builtin_cd(array[i]))
+			continue;
 
 		// run foreground command
 		switch(fork())
@@ -155,8 +178,8 @@ process_script(char* line)
 			}
 		}
 
-		// free line created by environment variables expansion
-		free(expanded);
+//		// free line created by environment variables expansion
+//		free(expanded);
 	}
 
 	return 0;

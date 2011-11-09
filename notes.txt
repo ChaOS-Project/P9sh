@@ -1,10 +1,10 @@
 Obligatory
 ==========
 [2011-11-05] Read from stdin and write to stdout with bio(2)
-[2011-11-07] Make loop
+[2011-11-07] Main loop
 	Catch signals
 [2011-11-05] Exec one command with arguments from command line
-* Commands search order (built-in, current dir and /bin)
+[2011-11-09] Commands search order (built-in, current dir and /bin)
 [2011-11-05] Split commands with pipes
 [2011-11-05] Exec several commands with arguments from command line
 [2011-11-06] Connect stdin and stdout between commands (pipes)
@@ -13,8 +13,8 @@ Obligatory
 [2011-11-05] Ampersand
 	Don't redirect stdin to command (/dev/null instead of /dev/cons)
 	Return prompt inmediately
-* Built-ins
-	* cd
+[2011-11-09] Built-ins
+	[2011-11-09] cd
 
 Optional I
 ==========

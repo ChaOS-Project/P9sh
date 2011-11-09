@@ -11,7 +11,7 @@
 #include "builtins.h"
 
 
-typedef void (*builtin)(char* argv[]);
+typedef void (*builtin)(int argc, char* argv[]);
 
 
 builtin
@@ -19,36 +19,47 @@ getBuiltin(char* command)
 // Return a pointer to the function corresponding to the built-in `command`.
 // If `command` doesn't exists return nil.
 {
-	if(!strcmp(command, "cd"))
-		return cd;
+//	if(!strcmp(command, "cd"))
+//		return cd;
 
 	return nil;
 }
 
 
 void
-run_command(char* array[])
+run_command(int argc, char* argv[])
 {
-	if(array[0] != nil)
+	if(argv[0] != nil)
 	{
 		// Check if command is a built-in function
-		builtin command = getBuiltin(array[0]);
+		builtin command = getBuiltin(argv[0]);
 		if(command)
 		{
-			command(array);
+			command(argc, argv);
 			exits(nil);
 		}
 
 		// Not built-in, search command
 		else
 		{
-			// Calc command path
 			char path[256];
-			strncpy(path, "/bin/",6);
-			strncat(path, array[0], strlen(array[0]));
+
+			// Calc command path for current dir
+			strncpy(path, "./",6);
+			strncat(path, argv[0], strlen(argv[0]));
+
+			// If command doesn't exists at current dir,
+			// calc command path on bin dir
+			Dir* d = dirstat(path);
+			if(d == nil)
+			{
+				strncpy(path, "/bin/",6);
+				strncat(path, argv[0], strlen(argv[0]));
+			}
+			free(d);
 
 			// run command
-			exec(path, array);
+			exec(path, argv);
 			sysfatal("exec: %r");
 		}
 	}
@@ -61,10 +72,10 @@ process_command(char* line)
 	// Create array of arguments from line
 	char** array = calloc(10, sizeof(char*));
 //	char* array[10];
-	tokenize(line, array, 10);
+	int numTokens = tokenize(line, array, 10);
 
 	// run command line
-	run_command(array);
+	run_command(numTokens, array);
 
 	// Free array
 	free(array);

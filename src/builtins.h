@@ -8,6 +8,6 @@
 #ifndef BUILTINS_H_
 #define BUILTINS_H_
 
-void cd(char* argv[]);
+void cd(int argc, char* argv[]);
 
 #endif /* BUILTINS_H_ */

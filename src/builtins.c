@@ -10,39 +10,22 @@
 
 
 void
-cd(char* argv[])
+cd(int argc, char* argv[])
 {
-	char* path = argv[1];
-	print("cd 1 %s\n",path);
-
-	// Called with no parameters
-	if(path == nil || path[0] == 0)
+	// Called with no parameters, go to $HOME
+	if(argc == 1)
 	{
-		path = getenv("HOME");
-		print("cd 2 %s\n",path);
+		char* path = getenv("HOME");
 
-		putenv("PWD", path);
+		chdir(path);
+//		putenv("PWD", path);
 		free(path);
 	}
 
-	// Called with absolute path
-	else if(path[0] != '/')
-	{
-		char newpath[256];
-
-		char* pwd = getenv("PWD");
-		strncpy(newpath, pwd,strlen(pwd));
-		free(pwd);
-
-		strncat(newpath, "/", 2);
-		strncat(newpath, path, strlen(path));
-		print("cd 3 %s\n",newpath);
-
-		putenv("PWD", newpath);
-	}
-
-	// Called with relative path
+	// Called with a path parameter (relative or absolute)
 	else
-		putenv("PWD", path);
-	print("getenv %s\n",getenv("PWD"));
+	{
+		chdir(argv[1]);
+//		putenv("PWD", path);
+	}
 }
