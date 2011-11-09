@@ -15,7 +15,7 @@ typedef void (*builtin)(int argc, char* argv[]);
 
 
 builtin
-isBuiltin(char* command)
+getBuiltin(char* command)
 {
 //	if(!strcmp(command, "cd"))
 //		return cd;
@@ -30,7 +30,7 @@ run_command(int argc, char* argv[])
 	if(argv[0] != nil)
 	{
 		// Check if command is a built-in function
-		builtin command = isBuiltin(argv[0]);
+		builtin command = getBuiltin(argv[0]);
 		if(command)
 		{
 			command(argc, argv);
@@ -40,10 +40,21 @@ run_command(int argc, char* argv[])
 		// Not built-in, search command
 		else
 		{
-			// Calc command path
 			char path[256];
-			strncpy(path, "/bin/",6);
+
+			// Calc command path for current dir
+			strncpy(path, "./",6);
 			strncat(path, argv[0], strlen(argv[0]));
+
+			// If command doesn't exists at current dir,
+			// calc command path on bin dir
+			Dir* d = dirstat(path);
+			if(d == nil)
+			{
+				strncpy(path, "/bin/",6);
+				strncat(path, argv[0], strlen(argv[0]));
+			}
+			free(d);
 
 			// run command
 			exec(path, argv);
