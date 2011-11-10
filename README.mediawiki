@@ -6,25 +6,25 @@ Originally developed as a practice for the Operating Systems course at Rey JuanC
 Well, at a first point because it's focused on Plan 9 (althought it compiles under Linux with Plan9port, and maybe i would do a native Linux/Unix version in the future), but also because P9 sound similar to Piranna :-P
 
 = Characteristics =
-# Low size
-# Low memory footprint
-# Clean and very legible code
-# Highly modular
+* Low size
+* Low memory footprint
+* Clean and very legible code
+* Highly modular
 
 = Features =
-# Input buffered
-# Support for built-ins "a-la" [http://busybox.net BusyBox]
-## cd
-# Pipelines
-# Stdin & stdout redirection
-# Commands in background
+* Input buffered
+* Support for built-ins "a-la" [http://busybox.net BusyBox]
+** cd
+* Pipelines
+* Stdin & stdout redirection
+* Commands in background
 
 = Requeriments =
 == Linux/Unix ==
-# [http://swtch.com/plan9port Plan9port]
+* [http://swtch.com/plan9port Plan9port]
 
 == Plan 9 ==
-# -Nothing- (obviusly... :-D )
+* -Nothing- (obviusly... :-D )
 
 = Built-ins =
 A built-in in P9sh is simply a function with a C-main sign, so they are really easy to develop:
