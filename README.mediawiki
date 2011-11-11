@@ -1,4 +1,4 @@
-P9sh is a command line shell for Plan 9 operating system and compatible with Linux/Unix.
+Command line shell for Plan 9 operating system compatible with Linux/Unix.
 
 Originally developed as a practice for the Operating Systems course at Rey JuanCarlos University at Spain, my intention is in the future add more features to become it more Unix-user friendly. Think of it more like [http://en.wikipedia.org/wiki/Almquist_shell ash] than like [http://en.wikipedia.org/wiki/Rc rc].
 
