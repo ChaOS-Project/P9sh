@@ -23,6 +23,34 @@ getBuiltin(char* command)
 	return nil;
 }
 
+char*
+getPath(char* command)
+{
+	char* env = getenv("PATH");
+	char* array[10];
+	int numTokens = gettokens(env, array, 10, "\t\r\n :");
+
+	char* path = calloc(256, sizeof(char));
+
+	int i;
+	for(i = 0; i < numTokens; ++i)
+	{
+		// Calc command path
+		strncpy(path, array[i],256);
+		strncat(path, "/", 1);
+		strncat(path, command, strlen(command));
+
+		// If command exists at dir, return it
+		Dir* d = dirstat(path);
+		free(d);
+		if(d)	// We are only interested on the pointer, not on it's content...
+			break;
+	}
+
+	free(env);
+	return path;
+}
+
 
 void
 run_command(int argc, char* argv[])
@@ -40,21 +68,8 @@ run_command(int argc, char* argv[])
 		// Not built-in, search command
 		else
 		{
-			char path[256];
-
-			// Calc command path for current dir
-			strncpy(path, "./",6);
-			strncat(path, argv[0], strlen(argv[0]));
-
-			// If command doesn't exists at current dir,
-			// calc command path on bin dir
-			Dir* d = dirstat(path);
-			if(d == nil)
-			{
-				strncpy(path, "/bin/",6);
-				strncat(path, argv[0], strlen(argv[0]));
-			}
-			free(d);
+			// Calc command path
+			char* path = getPath(argv[0]);
 
 			// run command
 			exec(path, argv);
