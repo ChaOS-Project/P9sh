@@ -33,10 +33,10 @@ main(int argc, char* argv[])
 
 	// Main loop
 	char* line;
-	while(line = Brdstr(bin, '\n', 0))
+	while((line = Brdstr(bin, '\n', 0)))
 	{
 		// Process heredoc
-		if(heredoc_process(&heredoc, line))
+		if(heredoc_process(&heredoc, &line))
 			continue;
 
 		// Process script

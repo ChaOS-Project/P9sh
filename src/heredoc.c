@@ -26,24 +26,24 @@ heredoc_end(char* line)
 
 
 int
-heredoc_process(tHeredoc* heredoc, char* line)
+heredoc_process(tHeredoc* heredoc, char** line)
 {
 	if(heredoc->mode)
 	{
-		if(heredoc_end(line))
+		if(heredoc_end(*line))
 		{
-			free(line);
+			free(*line);
 
 			int len = strlen(heredoc->command) + strlen(heredoc->buffer) + 9;
-			line = malloc(len * sizeof(char));
-			strcpy(line, "echo ");
+			*line = malloc(len * sizeof(char));
+			strcpy(*line, "echo ");
 
 			char* quote = quotestrdup(heredoc->buffer);
-			strcat(line, quote);
+			strcat(*line, quote);
 			free(quote);
 
-			strcat(line, " | ");
-			strcat(line, heredoc->command);
+			strcat(*line, " | ");
+			strcat(*line, heredoc->command);
 
 			heredoc->mode = 0;
 		}
@@ -51,8 +51,8 @@ heredoc_process(tHeredoc* heredoc, char* line)
 		// Copy line to the heredoc buffer
 		else
 		{
-			strncat(heredoc->buffer, line, strlen(line));
-			free(line);
+			strncat(heredoc->buffer, *line, strlen(*line));
+			free(*line);
 			return 1;
 		}
 	}
@@ -60,14 +60,14 @@ heredoc_process(tHeredoc* heredoc, char* line)
 	// Enable heredoc mode
 	else
 	{
-		char* pos = heredoc_begin(line);
+		char* pos = heredoc_begin(*line);
 		if(pos)
 		{
 			heredoc->mode = 1;
 
-			strncpy(heredoc->command, line, 256);
-			heredoc->command[pos-line] = '\0';
-			free(line);
+			strncpy(heredoc->command, *line, 256);
+			heredoc->command[pos-*line] = '\0';
+			free(*line);
 
 			heredoc->buffer[0] = '\0';
 
