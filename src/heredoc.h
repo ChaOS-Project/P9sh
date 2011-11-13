@@ -8,7 +8,13 @@
 #ifndef HEREDOC_H_
 #define HEREDOC_H_
 
-char* heredoc_begin(char* line);
-int   heredoc_end(char* line);
+typedef struct
+{
+	int  mode;
+	char command[256];
+	char buffer[1024];
+} tHeredoc;
+
+int heredoc_process(tHeredoc* heredoc, char* line);
 
 #endif /* HEREDOC_H_ */
