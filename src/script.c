@@ -111,6 +111,8 @@ background(char* line)
 int
 builtin_cd(char* line)
 {
+	line = strdup(line);
+
 	char* array[10];
 	int numTokens = tokenize(line, array, 10);
 
@@ -118,9 +120,11 @@ builtin_cd(char* line)
 	{
 		cd(numTokens, array);
 
+		free(line);
 		return 1;
 	}
 
+	free(line);
 	return 0;
 }
 

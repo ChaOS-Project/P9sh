@@ -60,9 +60,12 @@ stdout_redirection(char* array[], int i, int* len)
 void
 file_redirections(char* line)
 {
+//	char* linedup = strdup(line);
+
 	// Split line in independent tokens
 	char* array[10];
-	int numTokens = tokenize(line, array, 10);
+	int numTokens = gettokens(line, array, 10, "\t\r ");
+//	int numTokens = tokenize(linedup, array, 10);
 
 	// search and apply redirections
 	int i = 0;
@@ -106,4 +109,6 @@ file_redirections(char* line)
 			++line;
 		}
 	}
+
+//	free(linedup);
 }

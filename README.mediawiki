@@ -1,11 +1,37 @@
-P9sh is a command line shell for Plan 9 operating system develop as a practice for the Operating Systems course at Rey JuanCarlos University at Spain.
+Command line shell for Plan 9 operating system compatible with Linux/Unix.
+
+Originally developed as a practice for the Operating Systems course at Rey JuanCarlos University at Spain, my intention is in the future add more features to become it more Unix-user friendly. Think of it more like [http://en.wikipedia.org/wiki/Almquist_shell ash] than like [http://en.wikipedia.org/wiki/Rc rc].
+
+This code can also be found at https://github.com/piranna/P9sh
 
 = Why the name of P9sh? =
 Well, at a first point because it's focused on Plan 9 (althought it compiles under Linux with Plan9port, and maybe i would do a native Linux/Unix version in the future), but also because P9 sound similar to Piranna :-P
 
+= Characteristics =
+* Low size
+* Low memory footprint
+* Clean and very legible code
+* Highly modular
+
+= Features =
+* Input buffered
+* Support for built-ins "a-la" [http://busybox.net BusyBox]
+** cd
+* Pipelines
+* Stdin & stdout redirection
+* Commands in background
+* heredocs (using brackets are identifiers)
+
 = Requeriments =
 == Linux/Unix ==
-# [http://swtch.com/plan9port Plan9port]
+* [http://swtch.com/plan9port Plan9port]
 
 == Plan 9 ==
-# -Nothing- (obviusly... :-D )
+* -Nothing- (obviusly... :-D )
+
+= Built-ins =
+A built-in in P9sh is simply a function with a C-main sign, so they are really easy to develop:
+# copy&paste the original source code of the program to embed somewhere in the P9sh source tree (it's own file it's not a bad idea... :-) )
+# rename the built-in main function to something different... and meaningful
+# add an entry for the new built-in at getBuiltin() function
+# ...et voila! :-D

@@ -16,6 +16,7 @@
 
 #include <bio.h>
 
+#include "heredoc.h"
 #include "script.h"
 
 
@@ -27,11 +28,21 @@ main(int argc, char* argv[])
 	if(bin == nil)
 		sysfatal("%s: standard input: %r", argv0);
 
+	tHeredoc heredoc;
+	heredoc.mode = 0;
+
 	// Main loop
 	char* line;
-	while(line = Brdstr(bin, '\n', 0))
+	while((line = Brdstr(bin, '\n', 0)))
 	{
+		// Process heredoc
+		if(heredoc_process(&heredoc, &line))
+			continue;
+
+		// Process script
 		process_script(line);
+
+		// Free procesed line
 		free(line);
 	}
 

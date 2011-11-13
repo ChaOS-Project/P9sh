@@ -18,9 +18,9 @@ Obligatory
 
 Optional I
 ==========
-Detect squares
-Get content from stdin
-Send stdin content to command
+[2011-11-12] Detect squares
+[2011-11-12] Get content from stdin
+[2011-11-13] Send stdin content to command
 
 Optional II
 ===========
