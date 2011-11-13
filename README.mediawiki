@@ -2,6 +2,8 @@ Command line shell for Plan 9 operating system compatible with Linux/Unix.
 
 Originally developed as a practice for the Operating Systems course at Rey JuanCarlos University at Spain, my intention is in the future add more features to become it more Unix-user friendly. Think of it more like [http://en.wikipedia.org/wiki/Almquist_shell ash] than like [http://en.wikipedia.org/wiki/Rc rc].
 
+This code can also be found at https://github.com/piranna/P9sh
+
 = Why the name of P9sh? =
 Well, at a first point because it's focused on Plan 9 (althought it compiles under Linux with Plan9port, and maybe i would do a native Linux/Unix version in the future), but also because P9 sound similar to Piranna :-P
 
@@ -18,6 +20,7 @@ Well, at a first point because it's focused on Plan 9 (althought it compiles und
 * Pipelines
 * Stdin & stdout redirection
 * Commands in background
+* heredocs (using brackets are identifiers)
 
 = Requeriments =
 == Linux/Unix ==
