@@ -134,6 +134,27 @@ builtin_cd(char* line)
 	return 0;
 }
 
+int
+set_env(char* line)
+{
+	// Split line in different assignations
+	char* array[10];
+	int numAssignations = gettokens(line, array, 10, "=");
+
+	if(numAssignations > 1)
+	{
+		char* value = array[numAssignations-1];
+
+		numAssignations -= 2;
+		for(; numAssignations >= 0; --numAssignations)
+			putenv(array[numAssignations], value);
+
+		return 1;
+	}
+
+	return 0;
+}
+
 
 int
 process_script(char* line)
@@ -157,6 +178,10 @@ process_script(char* line)
 		// Exec `cd` (it's a built-in, but must change shell environment itself,
 		// so we check and exec for it directly here)
 		if(builtin_cd(array[i]))
+			continue;
+
+		// Set environment variable
+		if(set_env(array[i]))
 			continue;
 
 		// run foreground command
