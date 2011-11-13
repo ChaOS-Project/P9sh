@@ -18,23 +18,24 @@
 char*
 expand_envVars(char* line)
 {
+	line = "ls";
+
 	// Compile regular expression
-	Reprog* prog = regcomp("[a-zA-Z_]+");
-//	Reprog* prog = regcomp("\\$[a-zA-Z_]+");
-	print("prog: %x\n",prog);
+	char reg[] = "[a-zA-Z_]+";
+//	char reg[] = "\\$[a-zA-Z_]+";
+	Reprog* prog = regcomp(reg);
 
 	Resub sub[16];
-	char* expanded = nil;
-	print("line: %s\n", line);
-	print("strlen: %d\n", strlen(line));
 
 	print("nelem(sub): %d\n", nelem(sub));
 	print("regexec: %d\n", regexec(prog, line, sub, nelem(sub)));
 
+	char* expanded = nil;
+
 	// Exec regular expression until there's no match
 	while(regexec(prog, line, sub, nelem(sub)))
 	{
-		print("4");
+		print("expanded: %s\n",expanded);
 		if(expanded == nil)
 		{
 			print("5");
@@ -49,7 +50,12 @@ expand_envVars(char* line)
 		print("7");
 
 		// Concat environment var
-		strncat(expanded, sub[0].s.sp, sub[0].e.ep - sub[0].s.sp);
+		char match[256];
+		strncpy(match, sub[0].s.sp, sub[0].e.ep - sub[0].s.sp);
+
+		char* env = getenv(match);
+		strncat(expanded, env, strlen(env));
+		free(env);
 		print("8");
 
 		// Advance line pointer to catch the next match (if any)
@@ -140,8 +146,8 @@ process_script(char* line)
 	int i;
 	for(i = 0; i < numPipelines; ++i)
 	{
-		// expand environment variables and substitute command line char pointer
-		// with the one with expanded environment variables (if necesary)
+//		// expand environment variables and substitute command line char pointer
+//		// with the one with expanded environment variables (if necesary)
 //		char* expanded = expand_envVars(array[i]);
 //		if(expanded) array[i] = expanded;
 
