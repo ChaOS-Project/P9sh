@@ -23,6 +23,8 @@ Well, at a first point because it's focused on Plan 9 (althought it compiles und
 * heredocs (using brackets are identifiers)
 
 = Requeriments =
+* [http://en.wikipedia.org/wiki/Echo_(command) echo] (for heredoc)
+
 == Linux/Unix ==
 * [http://swtch.com/plan9port Plan9port]
 
