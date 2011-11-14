@@ -20,7 +20,10 @@ Well, at a first point because it's focused on Plan 9 (althought it compiles und
 * Pipelines
 * Stdin & stdout redirection
 * Commands in background
+
+== Optional extensions ==
 * heredocs (using brackets are identifiers)
+* environment vars (set & expansion)
 
 = Requeriments =
 == Linux/Unix ==
