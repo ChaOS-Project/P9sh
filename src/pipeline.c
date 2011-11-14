@@ -9,6 +9,7 @@
 #include <libc.h>
 
 #include "command.h"
+#include "environment.h"
 #include "file_redirections.h"
 
 
@@ -72,6 +73,9 @@ wait_childrens(char* array[], int numCommands)
 int
 process_pipeline(char* line)
 {
+	// redirect ouptut to environment variable
+	environment_redirection(line);
+
 	// apply file redirections
 	file_redirections(line);
 

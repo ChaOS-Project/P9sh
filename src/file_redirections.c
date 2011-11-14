@@ -12,16 +12,6 @@
 
 
 void
-remove_entry(char* array[], int i, int* len)
-{
-	for(; i < *len; ++i)
-		array[i] = array[i+1];
-
-	(*len)--;
-}
-
-
-void
 stdin_redirection(char* array[], int i, int* len)
 {
 	// '<' is alone in the entry, remove it and get the next one

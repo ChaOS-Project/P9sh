@@ -75,7 +75,7 @@ run_command(int argc, char* argv[])
 
 			// run command
 			exec(path, argv);
-			sysfatal("exec: %r");
+			sysfatal("%s: %r", argv[0]);
 		}
 	}
 }
