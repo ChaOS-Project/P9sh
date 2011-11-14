@@ -24,8 +24,8 @@ Optional I
 
 Optional II
 ===========
-Set environmental vars
-* Expand vars previously to command processing
+[2011-11-14] Set environmental vars
+[2011-11-14] Expand vars previously to command processing
 
 Optional III
 ============
