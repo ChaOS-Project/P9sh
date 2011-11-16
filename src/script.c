@@ -106,33 +106,7 @@ process_script(char* line)
 			continue;
 
 		// run foreground command
-		switch(fork())
-		{
-			case -1:
-				return -1;
-
-			case 0:		// child
-			{
-				// process pipeline
-				process_pipeline(array[i]);
-				exitError();
-			}
-
-			default:	// parent
-			{
-				Waitmsg* m = wait();
-
-				if(m->msg[0] == 0)
-					free(m);
-
-				else
-				{
-					werrstr(m->msg);
-					free(m);
-					return -1;
-				}
-			}
-		}
+		process_pipeline(array[i]);
 
 		// free line created by environment variables expansion
 		free(array[i]);
