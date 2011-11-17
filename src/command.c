@@ -75,6 +75,7 @@ run_command(int argc, char* argv[])
 
 			// run command
 			exec(path, argv);
+			free(path);	// not necessary, but for consistency
 			sysfatal("%s: %r", argv[0]);
 		}
 	}
@@ -92,6 +93,6 @@ process_command(char* line)
 	// run command line
 	run_command(numTokens, array);
 
-	// Free array
+	// Free array - not necessary, but for consistency
 	free(array);
 }
