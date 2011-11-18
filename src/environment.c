@@ -166,9 +166,8 @@ redirect_environment(char* key)
 			// reset var
 			putenv(key, "");
 
-			int nr;
 			char line[1024];
-			while((nr = read(0, line, sizeof(line))))
+			while(read(0, line, sizeof(line)))
 			{
 				print("line = '%s'\n", line);
 				char value[10 * 1024];

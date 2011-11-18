@@ -21,7 +21,11 @@
 
 
 void
-main(int argc, char* argv[])
+#ifdef Plan9
+	main(int, char*[])
+#else
+	main(int argc, char* argv[])
+#endif
 {
 	// Allocate buffer for standard input
 	Biobuf*	bin = Bfdopen(0, O_RDONLY);

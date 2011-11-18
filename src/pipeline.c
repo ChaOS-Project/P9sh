@@ -48,7 +48,7 @@ run_pipeline(char* array[], int numCommands)
 }
 
 int
-wait_childrens(char* array[], int numCommands)
+wait_childrens(int numCommands)
 {
 	int i = 0;
 	for(; i < numCommands; ++i)
@@ -88,5 +88,5 @@ process_pipeline(char* line)
 	if(ret < 0) return ret;
 
 	// Wait for child process result
-	return wait_childrens(array, numCommands);
+	return wait_childrens(numCommands);
 }
