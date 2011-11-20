@@ -58,8 +58,8 @@ echo
 echo *** Optional III ***
 
 a % ls -l
-echo "a = " $a
+echo a $a
 
 echo
 a % ls | grep .txt
-echo "a = " $a
+echo a $a
