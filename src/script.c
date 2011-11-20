@@ -99,11 +99,17 @@ process_script(char* line)
 		// Exec `cd` (it's a built-in, but must change shell environment itself,
 		// so we check and exec for it directly here)
 		if(builtin_cd(array[i]))
+		{
+			free(array[i]);
 			continue;
+		}
 
 		// Set environment variable
 		if(environment_set(array[i]))
+		{
+			free(array[i]);
 			continue;
+		}
 
 		// run foreground command
 		process_pipeline(array[i]);
