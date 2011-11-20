@@ -16,6 +16,7 @@
 
 #include <bio.h>
 
+#include "common.h"
 #include "heredoc.h"
 #include "script.h"
 
@@ -23,6 +24,10 @@
 void
 main(int argc, char* argv[])
 {
+	// Run script from file given as parameter instead of stdin if necesary
+	if(argc > 1)
+		redirect_stdin(argv[1]);
+
 	// Allocate buffer for standard input
 	Biobuf*	bin = Bfdopen(0, O_RDONLY);
 	if(bin == nil)

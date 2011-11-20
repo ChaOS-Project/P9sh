@@ -16,9 +16,6 @@
 int
 run_pipeline(char* array[], int numCommands)
 {
-	// backup of the original stdin file descriptor
-	int oldStdin = dup(0, -1);
-
 	int i = 0;
 	for(; i < numCommands; ++i)
 	{
@@ -46,9 +43,6 @@ run_pipeline(char* array[], int numCommands)
 				close(fd[0]);
 		}
 	}
-
-	// restore original stdin file descriptor
-	dup(oldStdin, 0);
 
 	return 0;
 }
@@ -79,6 +73,10 @@ wait_childrens(char* array[], int numCommands)
 int
 process_pipeline(char* line)
 {
+	// backup of the original stdin and stdout file descriptors
+	int oldStdin  = dup(0, -1);
+	int oldStdout = dup(1, -1);
+
 	// redirect ouptut to environment variable
 	environment_redirection(line);
 
@@ -91,6 +89,12 @@ process_pipeline(char* line)
 
 	// run pipeline
 	int ret = run_pipeline(array, numCommands);
+
+	// restore original stdin and stdout file descriptors
+	dup(oldStdin,  0);
+	dup(oldStdout, 1);
+
+	// return pipeline error value if necessary
 	if(ret < 0) return ret;
 
 	// Wait for child process result
