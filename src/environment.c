@@ -169,7 +169,6 @@ redirect_environment(char* key)
 			char line[1024];
 			while(read(0, line, sizeof(line)))
 			{
-				print("line = '%s'\n", line);
 				char value[10 * 1024];
 
 				char* env = getenv(key);
@@ -178,7 +177,6 @@ redirect_environment(char* key)
 				free(env);
 
 				putenv(key, value);
-				print(getenv(key));
 			}
 
 			exits(nil);
