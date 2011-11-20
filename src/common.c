@@ -10,7 +10,7 @@
 
 
 void
-exitError()
+exitError(void)
 // Check and set an error string previouly defined with werrstr
 {
 	char err[ERRMAX];

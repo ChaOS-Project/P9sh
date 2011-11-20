@@ -29,8 +29,8 @@ main(int argc, char* argv[])
 		redirect_stdin(argv[1]);
 
 	// Allocate buffer for standard input
-	Biobuf*	bin = Bfdopen(0, O_RDONLY);
-	if(bin == nil)
+	Biobuf bin;
+	if(Binit(&bin, 0, O_RDONLY))
 		sysfatal("%s: standard input: %r", argv0);
 
 	tHeredoc heredoc;
@@ -38,7 +38,7 @@ main(int argc, char* argv[])
 
 	// Main loop
 	char* line;
-	while((line = Brdstr(bin, '\n', 0)))
+	while((line = Brdstr(&bin, '\n', 0)))
 	{
 		// Process heredoc
 		if(heredoc_process(&heredoc, &line))
@@ -52,7 +52,7 @@ main(int argc, char* argv[])
 	}
 
 	// Free stdin buffer
-	Bterm(bin);
+	Bterm(&bin);
 
 	// Exit sucesfully
 	exits(nil);

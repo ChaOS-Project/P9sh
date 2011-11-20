@@ -19,8 +19,8 @@ getBuiltin(char* command)
 // Return a pointer to the function corresponding to the built-in `command`.
 // If `command` doesn't exists return nil.
 {
-//	if(!strcmp(command, "cd"))
-//		return cd;
+	if(!strcmp(command, "cd"))
+		return cd;
 
 	return nil;
 }

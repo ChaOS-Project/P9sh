@@ -76,7 +76,7 @@ builtin_cd(char* line)
 }
 
 
-int
+void
 process_script(char* line)
 {
 	// Split script in independent pipelines
@@ -117,6 +117,4 @@ process_script(char* line)
 		// free line created by environment variables expansion
 		free(array[i]);
 	}
-
-	return 0;
 }

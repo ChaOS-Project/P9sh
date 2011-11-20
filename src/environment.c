@@ -115,7 +115,7 @@ environment_expand(char* line)
 //			print("5");
 //			expanded = malloc(1024 * 10 * sizeof(char));
 //			*expanded = '\0';
-//			print("6");
+//			print("6");stdout.txt
 //		}
 //
 //		// Concat normal string from begining (if any)
@@ -163,22 +163,16 @@ redirect_environment(char* key)
 			dup(fd[0], 0);
 			close(fd[0]);
 
-			// reset var
-			putenv(key, "");
+			char value[10 * 1024];
+			value[0] = '\0';
 
+			// put stdout in value
 			char line[1024];
 			while(read(0, line, sizeof(line)))
-			{
-				char value[10 * 1024];
-
-				char* env = getenv(key);
-				strncpy(value, env, 10 * 1024);
 				strncat(value, line, 10 * 1024);
-				free(env);
 
-				putenv(key, value);
-			}
-
+			// put new value on environment variable
+			putenv(key, value);
 			exits(nil);
 
 		default:	// parent
@@ -195,8 +189,8 @@ environment_redirection(char* line)
 {
 	// Split line in independent tokens
 	char* array[10];
-	int numTokens = gettokens(line, array, 10, "\t\r ");
-//	int numTokens = tokenize(line, array, 10);
+//	int numTokens = gettokens(line, array, 10, "\t\r ");
+	int numTokens = tokenize(line, array, 10);
 
 	// search and apply redirections
 	int i = 1;
