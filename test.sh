@@ -14,15 +14,15 @@ ls | grep .txt
 
 echo
 echo *redirect stdout*
-echo redirect stdout > prueba.txt
-cat prueba.txt
-rm prueba.txt
+echo redirect stdout > stdout.txt
+cat stdout.txt
+rm stdout.txt
 
 echo
 echo *redirect stdin*
-echo redirect stdin > prueba.txt
-cat < prueba.txt
-rm prueba.txt
+echo redirect stdin > stdin.txt
+cat < stdin.txt
+rm stdin.txt
 
 
 echo
@@ -58,8 +58,8 @@ echo
 echo *** Optional III ***
 
 a % ls -l
-echo $a
+echo "a = " $a
 
 echo
 a % ls | grep .txt
-echo $a
+echo "a = " $a

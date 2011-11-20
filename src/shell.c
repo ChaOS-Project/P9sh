@@ -22,11 +22,7 @@
 
 
 void
-#ifdef Plan9
-	main(int, char*[])
-#else
-	main(int argc, char* argv[])
-#endif
+main(int argc, char* argv[])
 {
 	// Run script from file given as parameter instead of stdin if necesary
 	if(argc > 1)

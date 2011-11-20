@@ -195,7 +195,8 @@ environment_redirection(char* line)
 {
 	// Split line in independent tokens
 	char* array[10];
-	int numTokens = tokenize(line, array, 10);
+	int numTokens = gettokens(line, array, 10, "\t\r ");
+//	int numTokens = tokenize(line, array, 10);
 
 	// search and apply redirections
 	int i = 1;
