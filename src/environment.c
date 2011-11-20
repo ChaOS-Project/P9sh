@@ -14,20 +14,20 @@
 
 
 void
-do_expand(char** expanded, char* key)
+do_expand(char* expanded, char* key)
 {
 	if(key[0])
 	{
 		char* env = getenv(key);
 		if(env)
 		{
-			strcat(*expanded, env);
+			strcat(expanded, env);
 			free(env);
 		}
 //		else
 //		{
-//			strcat(*expanded, "$");
-//			strcat(*expanded, key);
+//			strcat(expanded, "$");
+//			strcat(expanded, key);
 //		}
 	}
 }
@@ -52,7 +52,7 @@ environment_expand(char* line)
 		if(c == '$')
 		{
 			// expand previous one (if any)
-			do_expand(&expanded, key);
+			do_expand(expanded, key);
 
 			// prepare new expansion
 			strncpy(key, "", 32);
@@ -76,7 +76,7 @@ environment_expand(char* line)
 			}
 			else
 			{
-				do_expand(&expanded, key);
+				do_expand(expanded, key);
 
 				strncpy(key, "", 32);
 				mode = 0;
@@ -84,7 +84,7 @@ environment_expand(char* line)
 		}
 	}
 
-	do_expand(&expanded, key);
+	do_expand(expanded, key);
 
 	return expanded;
 }

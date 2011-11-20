@@ -48,8 +48,8 @@ echo
 echo
 echo *** Optional II ***
 
-cmd = ls
-arg = /tmp
+cmd=ls
+arg=/tmp
 $cmd $arg
 
 
