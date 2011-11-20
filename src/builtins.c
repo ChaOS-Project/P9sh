@@ -15,7 +15,8 @@ cd(int argc, char* argv[])
 	// Called with no parameters, go to $HOME
 	if(argc == 1)
 	{
-		char* path = getenv("HOME");
+		char* path = getenv("home");
+//		char* path = getenv("HOME");
 
 		chdir(path);
 //		putenv("PWD", path);

@@ -28,7 +28,9 @@ getBuiltin(char* command)
 char*
 getPath(char* command)
 {
-	char* env = getenv("PATH");
+	char* env = getenv("path");
+//	char* env = getenv("PATH");
+
 	char* array[10];
 	int numTokens = gettokens(env, array, 10, "\t\r\n :");
 
