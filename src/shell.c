@@ -41,7 +41,8 @@ main(int argc, char* argv[])
 	while((line = Brdstr(&bin, '\n', 0)))
 	{
 		// Process heredoc
-		if(heredoc_process(&heredoc, &line))
+		line = heredoc_process(&heredoc, line);
+		if(!line)
 			continue;
 
 		// Process script

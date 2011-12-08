@@ -25,55 +25,61 @@ heredoc_end(char* line)
 }
 
 
-int
-heredoc_process(tHeredoc* heredoc, char** line)
+char*
+heredoc_process(tHeredoc* heredoc, char* line)
+// Check and eat heredoc lines.
+// While processing, it stores them at an internal buffer and return nil,
+// otherwise it returns the input and/or processed lines.
 {
+	// Heredoc is enabled - eat line
 	if(heredoc->mode)
 	{
-		if(heredoc_end(*line))
+		if(heredoc_end(line))
 		{
-			free(*line);
-
-			int len = strlen(heredoc->command) + strlen(heredoc->buffer) + 9;
-			*line = malloc(len * sizeof(char));
-			strcpy(*line, "echo ");
+			free(line);
 
 			char* quote = quotestrdup(heredoc->buffer);
-			strcat(*line, quote);
+
+			int len = strlen(heredoc->command) + strlen(quote) + 9;
+			line = malloc(len * sizeof(char));
+
+			strcpy(line, "echo ");
+			strcat(line, quote);
+			strcat(line, " | ");
+			strcat(line, heredoc->command);
+
 			free(quote);
-
-			strcat(*line, " | ");
-			strcat(*line, heredoc->command);
-
 			heredoc->mode = 0;
 		}
 
 		// Copy line to the heredoc buffer
 		else
 		{
-			strncat(heredoc->buffer, *line, strlen(*line));
-			free(*line);
-			return 1;
+			strncat(heredoc->buffer, line, strlen(line));
+
+			free(line);
+			return nil;
 		}
 	}
 
 	// Enable heredoc mode
 	else
 	{
-		char* pos = heredoc_begin(*line);
+		char* pos = heredoc_begin(line);
 		if(pos)
 		{
 			heredoc->mode = 1;
 
-			strncpy(heredoc->command, *line, 256);
-			heredoc->command[pos-*line] = '\0';
-			free(*line);
+			strncpy(heredoc->command, line, 256);
+			heredoc->command[pos-line] = '\0';
 
 			heredoc->buffer[0] = '\0';
 
-			return 1;
+			free(line);
+			return nil;
 		}
 	}
 
-	return 0;
+	// Heredoc is disabled, return (processed) line
+	return line;
 }

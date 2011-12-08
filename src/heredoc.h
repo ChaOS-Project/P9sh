@@ -15,6 +15,6 @@ typedef struct
 	char buffer[1024];
 } tHeredoc;
 
-int heredoc_process(tHeredoc* heredoc, char** line);
+char* heredoc_process(tHeredoc* heredoc, char* line);
 
 #endif /* HEREDOC_H_ */
