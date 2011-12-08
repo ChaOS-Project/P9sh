@@ -30,7 +30,7 @@ main(int argc, char* argv[])
 
 	// Allocate buffer for standard input
 	Biobuf bin;
-	if(Binit(&bin, 0, O_RDONLY))
+	if(Binit(&bin, 0, OREAD))
 		sysfatal("%s: standard input: %r", argv0);
 
 	tHeredoc heredoc;

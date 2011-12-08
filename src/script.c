@@ -58,19 +58,23 @@ background(char* line)
 int
 builtin_cd(char* line)
 {
+	// Local copy of `line` to work with and return status (default = false)
 	line = strdup(line);
 	int ret = 0;
 
+	// Split command line in independent tokens
 	char* array[10];
 	int numTokens = tokenize(line, array, 10);
 
-	if(!strcmp(array[0], "cd"))
+	// If it's a `cd` command, call to the built-in function and set ret value
+	if(numTokens && !strcmp(array[0], "cd"))
 	{
 		cd(numTokens, array);
 
 		ret = 1;
 	}
 
+	// Free local copy of line and return if current directory was changed
 	free(line);
 	return ret;
 }
