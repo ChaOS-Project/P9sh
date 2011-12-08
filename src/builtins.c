@@ -8,6 +8,12 @@
 #include <u.h>
 #include <libc.h>
 
+#if defined(unix)
+	#define ENV_HOME "HOME"
+#else
+	#define ENV_HOME "home"
+#endif
+
 
 void
 cd(int argc, char* argv[])
@@ -15,8 +21,7 @@ cd(int argc, char* argv[])
 	// Called with no parameters, go to $HOME
 	if(argc == 1)
 	{
-		char* path = getenv("home");
-//		char* path = getenv("HOME");
+		char* path = getenv(ENV_HOME);
 
 		chdir(path);
 //		putenv("PWD", path);

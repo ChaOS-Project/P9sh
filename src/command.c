@@ -10,6 +10,12 @@
 
 #include "builtins.h"
 
+#if defined(unix)
+	#define ENV_PATH "PATH"
+#else
+	#define ENV_PATH "path"
+#endif
+
 
 typedef void (*builtin)(int argc, char* argv[]);
 
@@ -28,8 +34,7 @@ getBuiltin(char* command)
 char*
 getPath(char* command)
 {
-	char* env = getenv("path");
-//	char* env = getenv("PATH");
+	char* env = getenv(ENV_PATH);
 
 	char* array[10];
 	int numTokens = gettokens(env, array, 10, "\t\r\n :");
