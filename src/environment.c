@@ -163,16 +163,26 @@ redirect_environment(char* key)
 			dup(fd[0], 0);
 			close(fd[0]);
 
-			char value[10 * 1024];
-			value[0] = '\0';
-
 			// put stdout in value
 			char line[1024];
 			while(read(0, line, sizeof(line)))
-				strncat(value, line, 10 * 1024);
+			{
+				char* env = getenv(key);
 
-			// put new value on environment variable
-			putenv(key, value);
+				int len = strlen(env) + strlen(line) + 1;
+				char* value = malloc(len * sizeof(char));
+
+				strcpy(value, env);
+				strcat(value, line);
+
+				free(env);
+
+				// put new value on environment variable
+				putenv(key, value);
+
+				free(value);
+			}
+
 			exits(nil);
 
 		default:	// parent
