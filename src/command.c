@@ -10,7 +10,7 @@
 
 #include "builtins.h"
 
-#if defined(unix)
+#ifdef unix
 	#define ENV_PATH "PATH"
 #else
 	#define ENV_PATH "path"

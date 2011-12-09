@@ -1,7 +1,7 @@
 </$objtype/mkfile
 
-OFILES = builtins.$O command.$O common.$O environment.$O file_redirections.$O heredoc.$O pipeline.$O script.$O shell.$O
-HFILES = builtins.h command.h common.h environment.h file_redirections.h heredoc.h pipeline.h script.h
+OFILES = builtins.$O command.$O common.$O environment.$O redirections.$O heredoc.$O pipeline.$O script.$O shell.$O
+HFILES = builtins.h command.h common.h environment.h redirections.h heredoc.h pipeline.h script.h
 TARG   = P9sh
 BIN    = $home/bin/$objtype
 

@@ -8,7 +8,7 @@
 #include <u.h>
 #include <libc.h>
 
-#if defined(unix)
+#ifdef unix
 	#define ENV_HOME "HOME"
 #else
 	#define ENV_HOME "home"
