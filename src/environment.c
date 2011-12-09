@@ -197,10 +197,13 @@ redirect_environment(char* key)
 void
 environment_redirection(char* line)
 {
+//	print("line: '%s'\n",line);
 	// Split line in independent tokens
+	char* linedup = strdup(line);
 	char* array[10];
-//	int numTokens = gettokens(line, array, 10, "\t\r ");
-	int numTokens = tokenize(line, array, 10);
+//	int numTokens = gettokens(linedup, array, 10, " ");
+//	int numTokens = gettokens(linedup, array, 10, "\t\r ");
+	int numTokens = tokenize(linedup, array, 10);
 
 	// search and apply redirections
 	int i = 1;
@@ -239,11 +242,12 @@ environment_redirection(char* line)
 	}
 
 	// collapse line to remove redirections
+	int diffpos = line-linedup;
 	for(i = 0; i < numTokens; ++i)
 	{
 		// move token
 		int len = strlen(array[i]);
-		memmove(line, array[i], len);
+		memmove(line, diffpos + array[i], len);
 
 		// add null byte at end of collapsed line
 		if(i >= numTokens-1)
@@ -252,10 +256,17 @@ environment_redirection(char* line)
 		// add space and advance if necesary
 		else if(len)
 		{
-			*(line+=len) = ' ';
-			++line;
+			while(array[i] + len + 1 < array[i+1])
+			{
+				*(line+len) = *(diffpos + array[i] + len);
+				len++;
+			}
+			line+=len+1;
 		}
 	}
+
+	// Free local copy of line
+	free(linedup);
 }
 
 
