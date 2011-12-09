@@ -10,7 +10,7 @@
 
 #include "command.h"
 #include "environment.h"
-#include "file_redirections.h"
+#include "redirections.h"
 
 
 int
@@ -77,11 +77,8 @@ process_pipeline(char* line)
 	int oldStdin  = dup(0, -1);
 	int oldStdout = dup(1, -1);
 
-	// redirect ouptut to environment variable
-	environment_redirection(line);
-
-	// apply file redirections
-	file_redirections(line);
+	// apply redirections
+	redirections(line);
 
 	// Split pipeline in independent commands
 	char* array[10];
