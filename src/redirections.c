@@ -9,6 +9,7 @@
 #include <libc.h>
 
 #include "common.h"
+#include "environment.h"
 
 
 void
