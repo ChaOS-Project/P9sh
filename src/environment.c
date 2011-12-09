@@ -197,12 +197,9 @@ redirect_environment(char* key)
 void
 environment_redirection(char* line)
 {
-//	print("line: '%s'\n",line);
 	// Split line in independent tokens
 	char* linedup = strdup(line);
 	char* array[10];
-//	int numTokens = gettokens(linedup, array, 10, " ");
-//	int numTokens = gettokens(linedup, array, 10, "\t\r ");
 	int numTokens = tokenize(linedup, array, 10);
 
 	// search and apply redirections
