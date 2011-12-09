@@ -256,12 +256,12 @@ environment_redirection(char* line)
 		// add space and advance if necesary
 		else if(len)
 		{
-			while(array[i] + len + 1 < array[i+1])
-			{
-				*(line+len) = *(diffpos + array[i] + len);
-				len++;
-			}
-			line+=len+1;
+			line+=len;
+			array[i]+=len;
+
+			int diff = array[i+1] - (array[i] + 1);
+			memmove(line, diffpos + array[i], diff);
+			line += diff + 1;
 		}
 	}
 
