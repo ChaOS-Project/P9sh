@@ -135,7 +135,7 @@ redirections(char* line)
 		}
 	}
 
-	if(array[numTokens-1][0])
+	if(numTokens && array[numTokens-1][0])
 	{
 		int len = strlen(array[numTokens-1]);
 		memmove(line, diffpos + array[numTokens-1], len);
