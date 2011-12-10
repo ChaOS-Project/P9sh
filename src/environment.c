@@ -63,16 +63,18 @@ environment_expand(char* line)
 		{
 			char* buf = mode? key: expanded;
 
-			buf[strlen(buf)] = c;
-			buf[strlen(buf)] = '\0';
+			int len = strlen(buf);
+			buf[len] = c;
+			buf[len+1] = '\0';
 		}
 
 		else
 		{
 			if(mode == 0)
 			{
-				expanded[strlen(expanded)] = c;
-				expanded[strlen(expanded)] = '\0';
+				int len = strlen(expanded);
+				expanded[len] = c;
+				expanded[len+1] = '\0';
 			}
 			else
 			{
@@ -163,6 +165,9 @@ redirect_environment(char* key)
 			dup(fd[0], 0);
 			close(fd[0]);
 
+			// Reset environment variable value (if any)
+			putenv(key, "");
+
 			// put stdout in value
 			char line[1024];
 			while(read(0, line, sizeof(line)))
@@ -179,7 +184,6 @@ redirect_environment(char* key)
 
 				// put new value on environment variable
 				putenv(key, value);
-
 				free(value);
 			}
 

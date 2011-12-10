@@ -92,9 +92,9 @@ void
 process_command(char* line)
 {
 	// Create array of arguments from line
-	char** array = calloc(10, sizeof(char*));
+	char** array = calloc(1000, sizeof(char*));
 //	char* array[10];
-	int numTokens = tokenize(line, array, 10);
+	int numTokens = tokenize(line, array, 1000);
 
 	// run command line
 	run_command(numTokens, array);

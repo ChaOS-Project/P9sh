@@ -14,7 +14,7 @@
 
 
 int
-run_pipeline(char* array[], int numCommands)
+run_pipeline(int numCommands, char* array[])
 {
 	int i = 0;
 	for(; i < numCommands; ++i)
@@ -85,7 +85,7 @@ process_pipeline(char* line)
 	int numCommands = gettokens(line, array, 10, "|");
 
 	// run pipeline
-	int ret = run_pipeline(array, numCommands);
+	int ret = run_pipeline(numCommands, array);
 
 	// restore original stdin and stdout file descriptors
 	dup(oldStdin,  0);
