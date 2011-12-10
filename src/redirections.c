@@ -13,60 +13,78 @@
 
 
 void
-redirections_environment(char* array[], int i, int* len)
+redirections_environment(char* array[], int i)
 {
+	char* file;
+
 	// '%' is alone in the entry, remove it and get the next one
 	if(strlen(array[i]) == 1)
-		remove_entry(array, i, len);
+		array[i][0] = '\0';
 
 	// entry has the file in it, set the pointer to it
 	else
 		array[i]++;
 
 	// Put index at previous token
-	--i;
+	file = array[i-1];
 
 	// Redirect stdout to file
-	redirect_environment(array[i]);
+	redirect_environment(file);
 
 	// Remove redirection from command parameters
-	remove_entry(array, i, len);
+	file[0] = '\0';
 }
 
 void
-redirections_stdin(char* array[], int i, int* len)
+redirections_stdin(char* array[], int i)
 {
+	char* file;
+
 	// '<' is alone in the entry, remove it and get the next one
 	if(strlen(array[i]) == 1)
-		remove_entry(array, i, len);
+	{
+		array[i][0] = '\0';
+		file = array[i+1];
+	}
 
 	// entry has the file in it, set the pointer to it
 	else
+	{
 		array[i]++;
+		file = array[i];
+	}
 
 	// Redirect stdin to file
-	redirect_stdin(array[i]);
+	redirect_stdin(file);
 
 	// Remove redirection from command parameters
-	remove_entry(array, i, len);
+	file[0] = '\0';
 }
 
 void
-redirections_stdout(char* array[], int i, int* len)
+redirections_stdout(char* array[], int i)
 {
+	char* file;
+
 	// '>' is alone in the entry, remove it and get the next one
 	if(strlen(array[i]) == 1)
-		remove_entry(array, i, len);
+	{
+		array[i][0] = '\0';
+		file = array[i+1];
+	}
 
 	// entry has the file in it, set the pointer to it
 	else
+	{
 		array[i]++;
+		file = array[i];
+	}
 
 	// Redirect stdout to file
-	redirect_stdout(array[i]);
+	redirect_stdout(file);
 
 	// Remove redirection from command parameters
-	remove_entry(array, i, len);
+	file[0] = '\0';
 }
 
 void
@@ -86,15 +104,15 @@ redirections(char* line)
 		switch(c)
 		{
 			case '%':	// Environment
-				redirections_environment(array, i, &numTokens);
+				redirections_environment(array, i);
 				break;
 
 			case '<':	// Stdin
-				redirections_stdin(array, i, &numTokens);
+				redirections_stdin(array, i);
 				break;
 
 			case '>':	// Stdout
-				redirections_stdout(array, i, &numTokens);
+				redirections_stdout(array, i);
 
 			default:
 				continue;
@@ -107,27 +125,24 @@ redirections(char* line)
 
 	// collapse line to remove redirections
 	int diffpos = line-linedup;
-	for(i = 0; i < numTokens; ++i)
+	for(i = 0; i < numTokens-1; ++i)
 	{
-		// move token
-		int len = strlen(array[i]);
-		memmove(line, diffpos + array[i], len);
-
-		// add null byte at end of collapsed line
-		if(i >= numTokens-1)
-			*(line+len) = '\0';
-
-		// add space and advance if necesary
-		else if(len)
+		if(array[i][0])
 		{
-			line+=len;
-			array[i]+=len;
-
-			int diff = array[i+1] - array[i];
-			memmove(line, diffpos + array[i], diff+1);
-			line += diff;
+			int len = array[i+1] - array[i];
+			memmove(line, diffpos + array[i], len);
+			line += len;
 		}
 	}
+
+	if(array[numTokens-1][0])
+	{
+		int len = strlen(array[numTokens-1]);
+		memmove(line, diffpos + array[numTokens-1], len);
+		line += len;
+	}
+	*line = '\0';
+
 
 	// Free local copy of line
 	free(linedup);

@@ -37,13 +37,3 @@ redirect_stdout(char* filepath)
 	dup(fd, 1);
 	close(fd);
 }
-
-
-void
-remove_entry(char* array[], int i, int* len)
-{
-	for(; i < *len; ++i)
-		array[i] = array[i+1];
-
-	(*len)--;
-}
