@@ -92,8 +92,8 @@ redirections(char* line)
 {
 	// Split line in independent tokens
 	char* linedup = strdup(line);
-	char* array[10];
-	int numTokens = tokenize(linedup, array, 10);
+	char* array[1000];
+	int numTokens = tokenize(linedup, array, 1000);
 
 	// search and apply redirections
 	int i = 0;

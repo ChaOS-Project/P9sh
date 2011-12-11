@@ -21,8 +21,12 @@ do_expand(char* expanded, char* key)
 		char* env = getenv(key);
 		if(env)
 		{
-			strcat(expanded, env);
+			char* quote = quotestrdup(env);
 			free(env);
+
+			strcat(expanded, quote);
+
+			free(quote);
 		}
 //		else
 //		{
@@ -37,11 +41,10 @@ environment_expand(char* line)
 // alternative function to expand environment variables using a state machine
 // since regular expression functions are not working correctly
 {
-	char* expanded = malloc(1024 * 10 * sizeof(char));
-	strncpy(expanded, "", 1024 * 10 * sizeof(char));
+	char* expanded = calloc(1024 * 10, sizeof(char));
 
 	char key[32];
-	strncpy(key, "", 32);
+	strcpy(key, "");
 
 	int mode = 0;
 
@@ -55,7 +58,7 @@ environment_expand(char* line)
 			do_expand(expanded, key);
 
 			// prepare new expansion
-			strncpy(key, "", 32);
+			strcpy(key, "");
 			mode = 1;
 		}
 
@@ -65,7 +68,6 @@ environment_expand(char* line)
 
 			int len = strlen(buf);
 			buf[len] = c;
-			buf[len+1] = '\0';
 		}
 
 		else
@@ -74,13 +76,15 @@ environment_expand(char* line)
 			{
 				int len = strlen(expanded);
 				expanded[len] = c;
-				expanded[len+1] = '\0';
 			}
 			else
 			{
 				do_expand(expanded, key);
 
-				strncpy(key, "", 32);
+				int len = strlen(expanded);
+				expanded[len] = c;
+
+				strcpy(key, "");
 				mode = 0;
 			}
 		}
