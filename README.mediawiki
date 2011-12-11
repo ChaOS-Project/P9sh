@@ -12,6 +12,7 @@ Well, at a first point because it's focused on Plan 9 (althought it compiles und
 * Low memory footprint
 * Clean and very legible code
 * Highly modular
+* Full of comments :-D
 
 = Features =
 * Input buffered

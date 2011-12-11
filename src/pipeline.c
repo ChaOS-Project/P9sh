@@ -15,6 +15,9 @@
 
 int
 run_pipeline(int numCommands, char* array[])
+// Redirect the different commands stdin & stdout on `array` between them
+// except the last stdout (so it goes to 'standard' shell stdout) on different
+// child process and exec them
 {
 	int i = 0;
 	for(; i < numCommands; ++i)
@@ -49,6 +52,8 @@ run_pipeline(int numCommands, char* array[])
 
 int
 wait_childrens(int numCommands)
+// Wait for the different child process to finish.
+// If one of them finish with an error, stop waiting and return the error
 {
 	int i = 0;
 	for(; i < numCommands; ++i)

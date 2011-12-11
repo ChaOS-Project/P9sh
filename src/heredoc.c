@@ -14,12 +14,14 @@
 
 char*
 heredoc_begin(char* line)
+// Check if `line` has the beginning of a new heredoc
 {
 	return strrchr(line, '[');
 }
 
 int
 heredoc_end(char* line)
+// Check if `line` has the end of the heredoc
 {
 	return line[0] == ']';
 }

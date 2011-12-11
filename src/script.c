@@ -57,6 +57,7 @@ background(char* line)
 
 int
 builtin_cd(char* line)
+// Addapt `line` data and exec built-in 'change directory' command
 {
 	// Local copy of `line` to work with and return status (default = false)
 	line = strdup(line);

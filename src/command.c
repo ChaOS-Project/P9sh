@@ -12,11 +12,14 @@
 
 #ifdef unix
 	#define ENV_PATH "PATH"
+	#define PATH_TOKEN_SPLIT ":"
 #else
 	#define ENV_PATH "path"
+	#define PATH_TOKEN_SPLIT "\t\r\n "
 #endif
 
 
+// Typedef with the C-main function sign to be used for the built-in functions
 typedef void (*builtin)(int argc, char* argv[]);
 
 
@@ -33,11 +36,14 @@ getBuiltin(char* command)
 
 char*
 getPath(char* command)
+// Search for `command` on the different directories specified on the path and
+// return the executable full path.
+// If command is not found, it returns the last processed full path
 {
 	char* env = getenv(ENV_PATH);
 
 	char* array[10];
-	int numTokens = gettokens(env, array, 10, "\t\r\n :");
+	int numTokens = gettokens(env, array, 10, PATH_TOKEN_SPLIT);
 
 	char* path = calloc(256, sizeof(char));
 
@@ -46,8 +52,8 @@ getPath(char* command)
 	{
 		// Calc command path
 		strncpy(path, array[i],256);
-		strncat(path, "/", 1);
-		strncat(path, command, strlen(command));
+		strncat(path, "/",     256);
+		strncat(path, command, 256);
 
 		// If command exists at dir, return it
 		Dir* d = dirstat(path);

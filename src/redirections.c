@@ -14,6 +14,7 @@
 
 void
 redirections_environment(char* array[], int i)
+// Redirect stdout to environment variable
 {
 	char* file;
 
@@ -37,6 +38,7 @@ redirections_environment(char* array[], int i)
 
 void
 redirections_stdin(char* array[], int i)
+// Redirect stdin to a file
 {
 	char* file;
 
@@ -63,6 +65,7 @@ redirections_stdin(char* array[], int i)
 
 void
 redirections_stdout(char* array[], int i)
+// Redirect stdout to a file
 {
 	char* file;
 
@@ -123,26 +126,27 @@ redirections(char* line)
 		--i;
 	}
 
-	// collapse line to remove redirections
+	// Collapse line to remove redirections
 	int diffpos = line-linedup;
 	for(i = 0; i < numTokens-1; ++i)
-	{
 		if(array[i][0])
 		{
 			int len = array[i+1] - array[i];
 			memmove(line, diffpos + array[i], len);
 			line += len;
 		}
-	}
 
+	// If last token was not a redirection,
+	// collapse it too until the end of the original `line` string
 	if(numTokens && array[numTokens-1][0])
 	{
 		int len = strlen(array[numTokens-1]);
 		memmove(line, diffpos + array[numTokens-1], len);
 		line += len;
 	}
-	*line = '\0';
 
+	// Set end of collapsed `line` string
+	*line = '\0';
 
 	// Free local copy of line
 	free(linedup);

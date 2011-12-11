@@ -15,9 +15,12 @@
 
 void
 do_expand(char* expanded, char* key)
+// Search for environment var `key` and append it to the `expanded` string
 {
+	// If `key` is not an empty string do the expansion, else do nothing
 	if(key[0])
 	{
+		// Get the environment variable and do the expansion if it exists
 		char* env = getenv(key);
 		if(env)
 		{
@@ -39,7 +42,8 @@ do_expand(char* expanded, char* key)
 char*
 environment_expand(char* line)
 // alternative function to expand environment variables using a state machine
-// since regular expression functions are not working correctly
+// since regular expression functions are not working correctly for me
+// (even with example code...)
 {
 	char* expanded = calloc(1024 * 10, sizeof(char));
 
@@ -48,10 +52,12 @@ environment_expand(char* line)
 
 	int mode = 0;
 
+	// Loop over all the characters of `line` string
 	for(; *line; ++line)
 	{
 		char c = *line;
 
+		// Begin of environment variable
 		if(c == '$')
 		{
 			// expand previous one (if any)
@@ -62,7 +68,10 @@ environment_expand(char* line)
 			mode = 1;
 		}
 
-		else if(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_')
+		// Alphanumeric character
+		// Append it to expanded string or to key depending of current mode
+		else if(('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_'
+			 || ('0' <= c && c <= '9'))
 		{
 			char* buf = mode? key: expanded;
 
@@ -71,23 +80,22 @@ environment_expand(char* line)
 			buf[len+1] = '\0';
 		}
 
+		// Other characters (spaces, tabs, new lines...)
+		// Depending of the current mode, just add them to the expanded string
+		// or expand previous key, too.
 		else
 		{
-			if(mode == 0)
-			{
-				int len = strlen(expanded);
-				expanded[len] = c;
-			}
-			else
+			if(mode)
 			{
 				do_expand(expanded, key);
-
-				int len = strlen(expanded);
-				expanded[len] = c;
 
 				strcpy(key, "");
 				mode = 0;
 			}
+
+			// Add readed simbol char
+			int len = strlen(expanded);
+			expanded[len] = c;
 		}
 	}
 
@@ -156,6 +164,7 @@ environment_expand(char* line)
 
 int
 redirect_environment(char* key)
+// Redirect stdout to a child process that write it to an environment variable
 {
 	int fd[2];
 	pipe(fd);
@@ -177,8 +186,10 @@ redirect_environment(char* key)
 			char line[1024];
 			while(read(0, line, sizeof(line)))
 			{
+				// Get previous value of the environment variable
 				char* env = getenv(key);
 
+				// Append new data to the previous one
 				int len = strlen(env) + strlen(line) + 1;
 				char* value = malloc(len * sizeof(char));
 
@@ -187,7 +198,7 @@ redirect_environment(char* key)
 
 				free(env);
 
-				// put new value on environment variable
+				// Put new value on the environment variable
 				putenv(key, value);
 				free(value);
 			}
@@ -206,19 +217,24 @@ redirect_environment(char* key)
 
 int
 environment_set(char* line)
+// Assign a value to one (or various) environment variable
+// Return 1 if assignations were processed, else return 0
 {
 	// Split line in different assignations
 	char* array[10];
 	int numAssignations = gettokens(line, array, 10, "=");
 
+	// If line has at least one assignation, do them
 	if(numAssignations > 1)
 	{
 		char* value = array[numAssignations-1];
 
+		// Remove trailing new line
 		int len = strlen(value);
 		if(value[len-1] == '\n')
 			value[len-1] = '\0';
 
+		// Do the assignations
 		numAssignations -= 2;
 		for(; numAssignations >= 0; --numAssignations)
 			putenv(array[numAssignations], value);

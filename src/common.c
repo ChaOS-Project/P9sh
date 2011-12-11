@@ -22,6 +22,7 @@ exitError(void)
 
 void
 redirect_stdin(char* filepath)
+// Redirect stdin to be `filepath` file
 {
 	int fd = open(filepath, OREAD);
 	dup(fd, 0);
@@ -30,6 +31,8 @@ redirect_stdin(char* filepath)
 
 void
 redirect_stdout(char* filepath)
+// Redirect stdout to be `filepath` file.
+// If file doesn't exists, create a new one
 {
 	int fd = open(filepath, OWRITE);
 	if(fd < 0)
