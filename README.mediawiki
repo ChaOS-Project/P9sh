@@ -24,6 +24,7 @@ Well, at a first point because it's focused on Plan 9 (althought it compiles und
 == Optional extensions (for the practice) ==
 * heredocs (using brackets are identifiers)
 * environment vars (set & expansion)
+* redirection to environment var
 
 = Requeriments =
 * [http://en.wikipedia.org/wiki/Echo_(command) echo] command (needed by heredoc implementation)
