@@ -68,6 +68,7 @@ environment_expand(char* line)
 
 			int len = strlen(buf);
 			buf[len] = c;
+			buf[len+1] = '\0';
 		}
 
 		else
@@ -213,6 +214,10 @@ environment_set(char* line)
 	if(numAssignations > 1)
 	{
 		char* value = array[numAssignations-1];
+
+		int len = strlen(value);
+		if(value[len-1] == '\n')
+			value[len-1] = '\0';
 
 		numAssignations -= 2;
 		for(; numAssignations >= 0; --numAssignations)
