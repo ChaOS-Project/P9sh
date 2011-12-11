@@ -46,7 +46,7 @@ main(int argc, char* argv[])
 			continue;
 
 		// Process script
-		process_script(line);
+		script_process(line);
 
 		// Free procesed line
 		free(line);

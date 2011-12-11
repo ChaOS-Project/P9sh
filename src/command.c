@@ -68,7 +68,7 @@ getPath(char* command)
 
 
 void
-run_command(int argc, char* argv[])
+command_run(int argc, char* argv[])
 {
 	if(argv[0] != nil)
 	{
@@ -95,15 +95,15 @@ run_command(int argc, char* argv[])
 
 
 void
-process_command(char* line)
+command_process(char* command)
 {
 	// Create array of arguments from line
 	char** array = calloc(1000, sizeof(char*));
 //	char* array[10];
-	int numTokens = tokenize(line, array, 1000);
+	int numTokens = tokenize(command, array, 1000);
 
 	// run command line
-	run_command(numTokens, array);
+	command_run(numTokens, array);
 
 	// Free array
 	free(array);

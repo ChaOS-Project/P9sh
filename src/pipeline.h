@@ -8,6 +8,6 @@
 #ifndef PIPELINE_H_
 #define PIPELINE_H_
 
-int process_pipeline(char* line);
+int pipeline_process(char* pipeline);
 
 #endif /* PIPELINE_H_ */

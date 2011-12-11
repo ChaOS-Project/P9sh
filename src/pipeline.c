@@ -14,7 +14,7 @@
 
 
 int
-run_pipeline(int numCommands, char* array[])
+pipeline_run(int numCommands, char* array[])
 // Redirect the different commands stdin & stdout on `array` between them
 // except the last stdout (so it goes to 'standard' shell stdout) on different
 // child process and exec them
@@ -36,7 +36,7 @@ run_pipeline(int numCommands, char* array[])
 					dup(fd[1],1);
 				close(fd[1]);
 
-				process_command(array[i]);
+				command_process(array[i]);
 				exits(nil);
 
 			default:	// parent
@@ -76,21 +76,21 @@ wait_childrens(int numCommands)
 
 
 int
-process_pipeline(char* line)
+pipeline_process(char* pipeline)
 {
 	// backup of the original stdin and stdout file descriptors
 	int oldStdin  = dup(0, -1);
 	int oldStdout = dup(1, -1);
 
 	// apply redirections
-	redirections(line);
+	redirections(pipeline);
 
 	// Split pipeline in independent commands
 	char* array[10];
-	int numCommands = gettokens(line, array, 10, "|");
+	int numCommands = gettokens(pipeline, array, 10, "|");
 
 	// run pipeline
-	int ret = run_pipeline(numCommands, array);
+	int ret = pipeline_run(numCommands, array);
 
 	// restore original stdin and stdout file descriptors
 	dup(oldStdin,  0);

@@ -38,7 +38,7 @@ background(char* line)
 				redirect_stdin("/dev/null");
 
 				// process pipeline
-				process_pipeline(array[i]);
+				pipeline_process(array[i]);
 				exitError();
 			}
 
@@ -82,11 +82,11 @@ builtin_cd(char* line)
 
 
 void
-process_script(char* line)
+script_process(char* script)
 {
 	// Split script in independent pipelines
 	char* array[10];
-	int numPipelines = gettokens(line, array, 10, ";");
+	int numPipelines = gettokens(script, array, 10, ";");
 
 	// run script commands
 	int i;
@@ -117,7 +117,7 @@ process_script(char* line)
 		}
 
 		// run foreground command
-		process_pipeline(array[i]);
+		pipeline_process(array[i]);
 
 		// free line created by environment variables expansion
 		free(array[i]);

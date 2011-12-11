@@ -8,6 +8,6 @@
 #ifndef COMMAND_H_
 #define COMMAND_H_
 
-void process_command(char* line);
+void command_process(char* command);
 
 #endif /* COMMAND_H_ */

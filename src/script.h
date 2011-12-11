@@ -8,6 +8,6 @@
 #ifndef SCRIPT_H_
 #define SCRIPT_H_
 
-void process_script(char* line);
+void script_process(char* script);
 
 #endif /* SCRIPT_H_ */
