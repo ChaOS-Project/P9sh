@@ -16,8 +16,6 @@ void
 redirections_environment(char* array[], int i)
 // Redirect stdout to environment variable
 {
-	char* file;
-
 	// '%' is alone in the entry, remove it and get the next one
 	if(strlen(array[i]) == 1)
 		array[i][0] = '\0';
@@ -27,7 +25,7 @@ redirections_environment(char* array[], int i)
 		array[i]++;
 
 	// Put index at previous token
-	file = array[i-1];
+	char* file = array[i-1];
 
 	// Redirect stdout to file
 	redirect_environment(file);
@@ -36,13 +34,13 @@ redirections_environment(char* array[], int i)
 	file[0] = '\0';
 }
 
-void
-redirections_stdin(char* array[], int i)
-// Redirect stdin to a file
+
+char*
+pop_redirection(char* array[], int i)
 {
 	char* file;
 
-	// '<' is alone in the entry, remove it and get the next one
+	// redirection is alone in the entry, remove it and get the next one
 	if(strlen(array[i]) == 1)
 	{
 		array[i][0] = '\0';
@@ -55,6 +53,17 @@ redirections_stdin(char* array[], int i)
 		array[i]++;
 		file = array[i];
 	}
+
+	return file;
+}
+
+
+void
+redirections_stdin(char* array[], int i)
+// Redirect stdin to a file
+{
+	// Extract redirection
+	char* file = pop_redirection(array, i);
 
 	// Redirect stdin to file
 	redirect_stdin(file);
@@ -67,21 +76,8 @@ void
 redirections_stdout(char* array[], int i)
 // Redirect stdout to a file
 {
-	char* file;
-
-	// '>' is alone in the entry, remove it and get the next one
-	if(strlen(array[i]) == 1)
-	{
-		array[i][0] = '\0';
-		file = array[i+1];
-	}
-
-	// entry has the file in it, set the pointer to it
-	else
-	{
-		array[i]++;
-		file = array[i];
-	}
+	// Extract redirection
+	char* file = pop_redirection(array, i);
 
 	// Redirect stdout to file
 	redirect_stdout(file);
