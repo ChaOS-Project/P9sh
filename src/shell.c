@@ -24,8 +24,14 @@
 void
 main(int argc, char* argv[])
 {
+    if(argc > 2)
+    {
+        fprint(2, "usage: %s [file]\n", argv[0]);
+        exits("usage");
+    }
+
 	// Run script from file given as parameter instead of stdin if necesary
-	if(argc > 1)
+	if(argc == 2)
 		redirect_stdin(argv[1]);
 
 	// Allocate buffer for standard input
@@ -42,14 +48,14 @@ main(int argc, char* argv[])
 	{
 		// Process heredoc
 		line = heredoc_process(&heredoc, line);
-		if(!line)
-			continue;
+		if(line)
+		{
+		    // Process script
+		    script_process(line);
 
-		// Process script
-		script_process(line);
-
-		// Free procesed line
-		free(line);
+		    // Free procesed line
+		    free(line);
+		}
 	}
 
 	// Free stdin buffer

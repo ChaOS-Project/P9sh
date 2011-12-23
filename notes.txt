@@ -30,8 +30,8 @@ Optional II
 Optional III
 ============
 [2011-11-xx] Split command line at %
-[2011-12-19] Get stdout of command
-[2011-12-19] Store stdout at environmental var
+[2011-12-09] Get stdout of command
+[2011-12-09] Store stdout at environmental var
 
 Optional IV
 ===========
